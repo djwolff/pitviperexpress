@@ -9,6 +9,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true });
 
 
 app.post('/hit', (req, res) => {
+    console.log(req);
     var hit = req.body;
     console.log('POST REQUEST');
     console.log(hit);
@@ -22,13 +23,19 @@ app.post('/hit', (req, res) => {
       db.collection('pi').save(hit, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database:', hit)
+        client.close();
+        res.redirect('/success')
       })
-      client.close();
     });
+
 });
 
 app.get('/', function (req, res) {
   res.send('pitviper')
+})
+
+app.get('/success', function (req, res) {
+  res.send('pitviper hit success')
 })
 
 app.listen(port, function () {
