@@ -7,14 +7,6 @@ var app = express();
 const uri = "mongodb+srv://pitviper:pitviper@cluster0-phevd.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
-var db
-client.connect((err, client) => {
-  if (err) return console.log('FUCK', err);
-  db = client.db('pitviper');
-  app.listen(port, function () {
-   console.log('Pitviper listening on port ', port);
-  });
-});
 
 app.post('/hit', (req, res) => {
     var hit = req.body;
@@ -24,13 +16,21 @@ app.post('/hit', (req, res) => {
 
     hit.datetime = new Date()
     // add to database
-    db.collection('pi').save(hit, (err, result) => {
-      if (err) return console.log(err)
-
-      console.log('saved to database')
-    })
+    client.connect((err, client) => {
+      if (err) return console.log('FUCK', err);
+      db = client.db('pitviper');
+      db.collection('pi').save(hit, (err, result) => {
+        if (err) return console.log(err)
+        console.log('saved to database:', hit)
+      })
+      client.close();
+    });
 });
 
 app.get('/', function (req, res) {
   res.send('pitviper')
 })
+
+app.listen(port, function () {
+ console.log('Pitviper listening on port ', port);
+});
