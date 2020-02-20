@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient;
 var port = process.env.PORT || 3000;
 var app = express();
@@ -7,15 +8,19 @@ var app = express();
 const uri = "mongodb+srv://pitviper:pitviper@cluster0-phevd.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
-
+app.use(bodyParser.json());
 app.post('/hit', (req, res) => {
-    console.log(req);
     var hit = req.body;
     console.log('POST REQUEST');
     console.log(hit);
-    if (!hit) return console.log('undefined hit')
+    if (!hit) {
+      console.log('undefined hit')
+      res.redirect('/')
+      return
+    }
 
     hit.datetime = new Date()
+
     // add to database
     client.connect((err, client) => {
       if (err) return console.log('FUCK', err);
