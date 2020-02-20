@@ -6,7 +6,7 @@ var app = express();
 
 // MongoDB
 const uri = "mongodb+srv://pitviper:pitviper@cluster0-phevd.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true });
+const client = new MongoClient(uri, { useNewUrlParser: true, useMongoClient: true });
 
 app.use(bodyParser.json());
 app.post('/hit', (req, res) => {
