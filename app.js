@@ -9,7 +9,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true });
 
 var db
 client.connect((err, client) => {
-  if (err) return console.log(err);
+  if (err) return console.log('FUCK', err);
   db = client.db('pitviper');
   app.listen(port, function () {
    console.log('Pitviper listening on port ', port);
