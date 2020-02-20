@@ -30,3 +30,7 @@ app.post('/hit', (req, res) => {
       console.log('saved to database')
     })
 });
+
+app.get('/', function (req, res) {
+  res.send('pitviper')
+})
