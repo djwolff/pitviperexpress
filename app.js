@@ -6,7 +6,7 @@ var app = express();
 
 // MongoDB
 const uri = "mongodb+srv://pitviper:pitviper@cluster0-phevd.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useMongoClient: true });
+const client = new MongoClient(uri, { useNewUrlParser: true});
 
 app.use(bodyParser.json());
 app.post('/hit', (req, res) => {
@@ -23,7 +23,11 @@ app.post('/hit', (req, res) => {
 
     // add to database
     client.connect((err, client) => {
-      if (err) return console.log('FUCK', err);
+      if (err){
+        console.log('FUCK', err);
+        res.redirect('/')
+        return
+      }
       db = client.db('pitviper');
       db.collection('pi').save(hit, (err, result) => {
         if (err) return console.log(err)
